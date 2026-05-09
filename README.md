@@ -1,66 +1,107 @@
-🚪 RYZEN Smart Lock: The Ultimate BLE Anti-Intruder System 🚨
-Welcome to the RYZEN Smart Lock repository!
+🚪 RYZEN Smart Lock
+BLE-Based Embedded Door Security System
 
-Tired of unauthorized people wandering into your room? Want a door that magically opens for your friends but sounds a literal emergency siren if a banned user tries to sneak in? You've come to the right place.
+An Arduino-powered smart lock system featuring RFID authentication, Bluetooth Low Energy (BLE) monitoring, real-time alerts, and power-optimized servo control.
 
-This is an Arduino-based embedded security system complete with RFID scanning, a custom Android companion app via Bluetooth Low Energy (BLE), and a power-optimized servo mechanism.
+Built as a mini-project for the Embedded Systems course at Universiti Putra Malaysia (FSKTM).
 
-🎓 Academic Context
-This project was developed as a 4-person group mini-project for the Embedded Systems course at Universiti Putra Malaysia (UPM - FSKTM). It demonstrates data acquisition, hardware-software integration, and teamwork, engineered specifically to hit that "Level 5 - Excellent" rubric standard.
+📌 Project Overview
+
+RYZEN Smart Lock is designed to provide:
+
+RFID-based access control
+BLE monitoring through a custom Android app
+Intruder detection with alarm triggers
+Power-efficient servo lock control
+
+The system integrates both hardware and software into a complete embedded security ecosystem.
 
 ✨ Features
-🛡️ Multi-Tier Access Control: Uses an MFRC522 RFID reader to manage access.
+🛡️ Multi-Level Access Control
 
-Master Admin (Aslam): Can unlock the door and reset active alarms.
+Using the MFRC522 RFID reader, the system classifies users into multiple permission levels:
 
-Authorized Users (Wan Afiq, Alex, Safwan): Get standard entry.
+User Type	Access
+Master Admin (Aslam)	Unlock door + reset alarms
+Authorized Users	Standard entry access
+Banned Users	Triggers lockdown + siren
+📱 Android BLE Companion App
 
-Banned Users (Rofy): Triggers an immediate hardware lockdown and dual-siren alarm.
+Custom Android application built with Kotlin:
 
-📱 Android Companion App: A custom-built Kotlin application that connects to the lock via BLE. It acts as a live serial terminal to monitor door activity and doubles as a secondary security alarm.
+Connects via Bluetooth Low Energy (BLE)
+Displays real-time lock activity
+Functions as a secondary alarm system
+Uses BluetoothGatt communication instead of classic RFCOMM sockets
+🔋 Power-Optimized Servo System
 
-🔋 Power-Optimized "Sleepy Servo": Employs a custom software routine to put the power-hungry servo motor to sleep (detach()) when not in use, preventing catastrophic voltage drops and system brownouts.
+Custom “Sleepy Servo” implementation:
 
-📢 Dual-Siren Alert System: If an intruder is detected, the Arduino sounds a physical buzzer while the Android app simultaneously hijacks the phone's audio to play a CDMA emergency ringback tone.
+Automatically detaches servo after movement
+Reduces power drain
+Prevents voltage drops and Arduino brownouts
+🚨 Dual-Siren Intruder Alert
 
-🛠️ The Hardware Stack
-We didn't just build a lock; we built a highly sensitive ecosystem of components. Here is what's under the hood:
+If unauthorized access is detected:
 
-Arduino Uno: The brain of the operation.
+Arduino activates physical buzzer alarm
+Android app plays emergency alert ringtone simultaneously
+🛠 Hardware Stack
+Component	Purpose
+Arduino Uno	Main controller
+MFRC522 RFID Reader	RFID authentication
+JDY / HM-10 BLE Module	BLE communication
+SG90 Servo Motor	Physical lock mechanism
+16x2 I2C LCD	Status display
+Active Buzzer	Alarm system
+💻 Software Stack
+Embedded System
+Arduino C++
+RFID handling
+Servo timing control
+State-machine logic
+Mobile Application
+Android Studio
+Kotlin
+BluetoothGatt BLE communication
+Real-time serial monitoring
+⚠ Lessons Learned
+Fake HC-05 Modules Exist
 
-MFRC522 RFID Reader: For scanning tags.
+Many modules sold as HC-05 are actually BLE devices.
 
-BLE Module (JDY/HM-10): Disguised as an HC-05, this Bluetooth Low Energy chip broadcasts our serial data over the FFE1 pipeline.
+This means:
 
-SG90 Servo Motor: The physical locking mechanism (and our biggest power rival).
+❌ BluetoothSocket will fail
+✅ BluetoothGatt must be used instead
 
-16x2 I2C LCD Screen: For real-time physical status updates.
+You may also need to locate the FFE1 characteristic manually.
 
-Active Buzzer: Because what's a security system without some noise?
+Servos Consume Serious Power
 
-📱 The Software Stack
-Embedded C++: The Arduino logic handling the RFID decryption, state machines, and servo timing.
+Servos continuously holding position can:
 
-Android / Kotlin: The mobile app bypasses outdated classic Bluetooth sockets and uses Android's modern BluetoothGatt libraries to intercept live data streams from the lock.
+Drain voltage regulators
+Cause instability
+Trigger Arduino resets
 
-💡 Lessons Learned (The Hard Way)
-If you are planning to fork this project or build your own, heed these warnings:
+Solutions:
 
-Beware the "Fake" HC-05: Many modules sold today are actually BLE chips. You cannot use standard BluetoothSocket RFCOMM connections with them. You must use GATT and hunt for the FFE1 characteristic!
+Detach servo when idle
+Use dedicated external power supply
+👥 Team Members
+Member	Role
+Aslam	Project Lead / Master Cardholder
+Alex Nay Zin Min Lwin	Programmer / Designer
+Wan Zuhaili Afiq	Presenter / Documentation
+Adam Safwan	Hardware / Wiring
+⭐ Acknowledgements
 
-Servos are Power Vampires: A servo holding its position at 90 degrees will actively fight to stay there, draining your Arduino's voltage regulator. Put your servos to sleep, or give them their own battery pack!
+Developed by a team of FSKTM students who survived:
 
-🤝 The Team
-Developed by a dedicated squad of 4 UPM FSKTM students who survived the ultimate battle against hardware brownouts and Bluetooth -1 socket errors.
+BLE debugging
+Servo brownouts
+Mysterious -1 socket errors
+Endless jumper wire problems
 
-(Note to team: Add your names/student IDs here!)
-
-Member 1: Aslam (Project Lead / Master Cardholder)
-
-Member 2: Alex Nay Zin Min Lwin (Programmer / Designer)
-
-Member 3: Wan Zuhaili Afiq (Presenter / Paperwork)
-
-Member 4: Adam Safwan (Hardware Provider / Wiring Expert)
-
-If this project helped you figure out your own BLE Arduino connection, leave a ⭐!
+If this project helped you understand BLE + Arduino communication, consider leaving a ⭐ on the repository.
