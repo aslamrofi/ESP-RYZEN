@@ -1,0 +1,15 @@
+{
+  "name": "HC-06-Bluetooth",
+  "author": "Person #6424",
+  "pins": [
+    "RXD",
+    "TXD",
+    "GND",
+    "VCC",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "controls": []
+}
